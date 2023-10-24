@@ -1,0 +1,96 @@
+print('Start the TicTacToe')
+import numpy as np
+import pandas as pd
+p = np.empty([3, 3], dtype=str)
+p[:] = ' '
+win_pos = [((0, 0), (0, 1), (0, 2)),
+           ((1, 0), (1, 1), (1, 2)),
+           ((2, 0), (2, 1), (2, 2)),
+           ((0, 0), (1, 0), (2, 0)),
+           ((0, 1), (1, 1), (2, 1)),
+           ((0, 2), (1, 2), (2, 2)),
+           ((0, 0), (1, 1), (2, 2)),
+           ((0, 2), (1, 1), (2, 0))]
+pos_fil = []
+import random
+var = ['X', 'O']
+def1 = random.choice(var)
+if def1 == 'X':
+    def2 = 'O'
+else:
+    def2 = 'X'
+Player1 = 'active'
+
+def print_board():
+    for row in p:
+        print(' | '.join(row))
+        print('-' * 9)
+
+class GetOutOfLoop( Exception ):
+    pass
+
+
+try:
+    while True:
+        print_board()
+        if Player1 == 'active':
+            x = input('Player 1, enter x co-ordinate ')
+            y = input('Player 1, enter y co-ordinate ')
+            if x and y in ['0','1','2']:
+                x = int(x)
+                y = int(y)
+           
+                if p[x][y] == ' ':
+                    p[x][y] = def1
+                    pos_fil.append((x, y))
+                    if len(pos_fil) >= 3:
+                        for win_pos_set in win_pos:
+                            if all(coord in pos_fil and p[coord[0]][coord[1]]==def1 for coord in win_pos_set):
+                                print_board()
+                                print('Player 1 wins')
+                                x = 'Player 1 wins'
+                                if x == 'Player 1 wins':
+                                    raise GetOutOfLoop
+                    Player1 = 'not active'
+                    continue
+                else:
+                    print('Check for a different position')
+               
+            else:
+                print('Enter a valid input')
+                continue
+    
+        else:
+            while True:
+               
+                x = input('Player 2, enter x co-ordinate ')
+                y = input('Player 2, enter y co-ordinate ')
+                if x and y in ['0','1','2']:
+                    x = int(x)
+                    y = int(y)
+           
+                    if p[x][y] == ' ':
+                        p[x][y] = def2
+                        pos_fil.append((x, y))
+                        if len(pos_fil) >= 3:
+                            for win_pos_set in win_pos:
+                                if all(coord in pos_fil and p[coord[0]][coord[1]]==def2 for coord in win_pos_set):
+                                    
+                                        print_board()
+                                        print('Player 2 wins')
+                                        x = 'Player 2 wins'
+                                        if x == 'Player 2 wins':
+                                            raise GetOutOfLoop
+                                    
+                        Player1 = 'active'
+                        break
+                       
+                    else:
+                        print('Check for a different position')
+                else:
+                    print('Enter a valid input')
+                    continue
+        continue
+
+except GetOutOfLoop:
+    pass
